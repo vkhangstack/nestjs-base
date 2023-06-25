@@ -10987,7 +10987,16 @@
     "minimist" "^1.2.6"
     "strip-bom" "^3.0.0"
 
-"tsconfig-paths@^4.1.2", "tsconfig-paths@4.1.2":
+"tsconfig-paths@^4.1.2", "tsconfig-paths@^4.2.0":
+  "integrity" "sha512-NoZ4roiN7LnbKn9QqE1amc9DJfzvZXxF4xDavcOWt1BPkdx+m+0gJuPM+S0vCe7zTJMYUP0R8pO2XMr+Y8oLIg=="
+  "resolved" "https://registry.npmjs.org/tsconfig-paths/-/tsconfig-paths-4.2.0.tgz"
+  "version" "4.2.0"
+  dependencies:
+    "json5" "^2.2.2"
+    "minimist" "^1.2.6"
+    "strip-bom" "^3.0.0"
+
+"tsconfig-paths@4.1.2":
   "integrity" "sha512-uhxiMgnXQp1IR622dUXI+9Ehnws7i/y6xvpZB9IbUVOPy0muvdvgXeZOn88UcGPiT98Vp3rJPTa8bFoalZ3Qhw=="
   "resolved" "https://registry.npmjs.org/tsconfig-paths/-/tsconfig-paths-4.1.2.tgz"
   "version" "4.1.2"

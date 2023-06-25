@@ -1,23 +1,21 @@
-import './boilerplate.polyfill';
 import 'winston-daily-rotate-file';
+import './boilerplate.polyfill';
 
 import { CacheModule, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 // import { ClientsModule, Transport } from '@nestjs/microservices';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from 'modules/auth/auth.module';
+import { HealthCheckerModule } from 'modules/health-checker/health-checker.module';
+import { UserModule } from 'modules/user/user.module';
 import { WinstonModule } from 'nest-winston';
 import path from 'path';
+import { ApiConfigService } from 'shared/services/api-config.service';
+import { SharedModule } from 'shared/shared.module';
 import { DataSource } from 'typeorm';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 import { format, transports } from 'winston';
-
-import { AuthModule } from './modules/auth/auth.module';
-import { HealthCheckerModule } from './modules/health-checker/health-checker.module';
-import { UserModule } from './modules/user/user.module';
-import { ApiConfigService } from './shared/services/api-config.service';
-import { SharedModule } from './shared/shared.module';
-
 @Module({
   imports: [
     AuthModule,

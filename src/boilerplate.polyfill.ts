@@ -187,7 +187,7 @@ SelectQueryBuilder.prototype.paginate = async function (
 
   const { entities, raw } = await this.getRawAndEntities();
 
-  const alias = this.expressionMap.mainAlias!;
+  const alias = this.expressionMap.mainAlias;
   const group = groupRows(raw, alias, this.connection.driver);
 
   const keys = alias.metadata.primaryColumns.map((column) =>

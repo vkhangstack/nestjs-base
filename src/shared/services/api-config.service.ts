@@ -57,14 +57,17 @@ export class ApiConfigService {
     return {
       keepConnectionAlive: !this.isTest,
       type: 'mariadb',
-      name: 'default',
+      timezone: '+07:00',
+      connectTimeout: 15_000,
       host: this.getString('DB_HOST'),
       port: this.getNumber('DB_PORT'),
       username: this.getString('DB_USERNAME'),
       password: this.getString('DB_PASSWORD'),
       database: this.getString('DB_DATABASE'),
       logging: this.getBoolean('ENABLE_ORM_LOGS'),
+      logger: 'debug',
       namingStrategy: new SnakeNamingStrategy(),
+      poolSize: 10,
     };
   }
 

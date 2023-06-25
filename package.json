@@ -6,13 +6,13 @@
   "private": true,
   "license": "ISC",
   "scripts": {
-    "build:prod": "tsc -p tsconfig.build.json",
+    "build:prod": "tsc-alias && tsc -p tsconfig.build.json",
     "postbuild:prod": "copyfiles --up 1 src/**/*.json dist",
     "start:hmr": "node dist/main.hmr.ts",
     "start:dev": "ts-node  src/main.ts",
     "start:prod": "node build/main.js",
     "typeorm": "typeorm-ts-node-esm",
-    "watch:dev": "ts-node-dev --clear --debug --respawn src/main.ts",
+    "watch:dev": "ts-node-dev -r tsconfig-paths/register --clear --debug src/main.ts",
     "debug:dev": "cross-env TS_NODE_CACHE=false ts-node-dev --inspect --ignore '/^src/.*\\.spec\\.ts$/' src/main.ts",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint --fix . --ext .ts",
@@ -124,6 +124,7 @@
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
     "tsc-alias": "^1.8.6",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.0.2"
   },
   "jest": {
