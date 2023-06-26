@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import type { MongooseModuleFactoryOptions } from '@nestjs/mongoose';
 import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as redisStore from 'cache-manager-redis-store';
 import { isNil } from 'lodash';
@@ -79,11 +80,15 @@ export class ApiConfigService {
     };
   }
 
-  get mongoConfig() {
+  get mongoConfig(): MongooseModuleFactoryOptions {
     return {
       uri: this.getString('MONGO_URI'),
-      retryAttempts: 5,
+      dbName: this.getString('MONGO_DB_NAME'),
+      user: this.getString('MONGO_USER'),
+      pass: this.getString('MONGO_PASS'),
+      journal: true,
       lazyConnection: this.getBoolean('MONGO_LAZY_CONNECTION'),
+      retryAttempts: 5,
     };
   }
 

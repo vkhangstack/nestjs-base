@@ -6,16 +6,17 @@ import { ConfigModule } from '@nestjs/config';
 // import { ClientsModule, Transport } from '@nestjs/microservices';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from 'modules/auth/auth.module';
-import { HealthCheckerModule } from 'modules/health-checker/health-checker.module';
-import { UserModule } from 'modules/user/user.module';
 import { WinstonModule } from 'nest-winston';
 import path from 'path';
-import { ApiConfigService } from 'shared/services/api-config.service';
-import { SharedModule } from 'shared/shared.module';
-import { DataSource } from 'typeorm';
-import { addTransactionalDataSource } from 'typeorm-transactional';
+// import { DataSource } from 'typeorm';
+// import { addTransactionalDataSource } from 'typeorm-transactional';
 import { format, transports } from 'winston';
+
+import { AuthModule } from './modules/auth/auth.module';
+import { HealthCheckerModule } from './modules/health-checker/health-checker.module';
+import { UserModule } from './modules/user/user.module';
+import { ApiConfigService } from './shared/services/api-config.service';
+import { SharedModule } from './shared/shared.module';
 @Module({
   imports: [
     AuthModule,
@@ -29,13 +30,13 @@ import { format, transports } from 'winston';
       useFactory: async (configService: ApiConfigService) =>
         configService.mariaConfig,
       inject: [ApiConfigService],
-      dataSourceFactory: async (options) => {
-        if (!options) {
-          throw new Error('Invalid options passed');
-        }
+      // dataSourceFactory: async (options) => {
+      //   if (!options) {
+      //     throw new Error('Invalid options passed');
+      //   }
 
-        return addTransactionalDataSource(new DataSource(options));
-      },
+      //   return addTransactionalDataSource(new DataSource(options));
+      // },
     }),
     MongooseModule.forRootAsync({
       imports: [SharedModule],
@@ -132,12 +133,23 @@ import { format, transports } from 'winston';
         exceptionHandlers: [
           new transports.Console({
             format: format.combine(
-              format.timestamp({ format: 'hh:mm:ss DD-MM-YYYY' }),
-              format.ms(),
-              format.json(),
+              format.colorize(),
+              format.simple(),
+              format.printf(
+                ({ level, message, timestamp }) =>
+                  `[${timestamp}] [${level}] - ${message}`,
+              ),
             ),
           }),
           new transports.File({
+            format: format.combine(
+              format.colorize(),
+              format.simple(),
+              format.printf(
+                ({ level, message, timestamp }) =>
+                  `[${timestamp}] [${level}] - ${message}`,
+              ),
+            ),
             dirname: path.join(__dirname, './../logs/exceptions/'),
             filename: 'exceptions.log',
             maxsize: 500_000,

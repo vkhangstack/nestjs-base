@@ -12,14 +12,14 @@ import { middleware as expressCtx } from 'express-ctx';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import { ApiConfigService } from 'shared/services/api-config.service';
-import { SharedModule } from 'shared/shared.module';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './filters/bad-request.filter';
 import { QueryFailedFilter } from './filters/query-failed.filter';
 import { setupSwagger } from './setup-swagger';
+import { ApiConfigService } from './shared/services/api-config.service';
+import { SharedModule } from './shared/shared.module';
 
 export async function bootstrap(): Promise<NestExpressApplication> {
   initializeTransactionalContext();
@@ -38,7 +38,7 @@ export async function bootstrap(): Promise<NestExpressApplication> {
     }),
   );
   app.use(compression());
-  app.use(morgan('combined'));
+  app.use(morgan('tiny'));
   app.enableVersioning();
 
   const reflector = app.get(Reflector);
@@ -74,8 +74,8 @@ export async function bootstrap(): Promise<NestExpressApplication> {
   }
 
   const port = configService.appConfig.port;
-  const host = configService.appConfig.host;
-  await app.listen(port, host);
+  const hostname = configService.appConfig.host;
+  await app.listen(port, hostname);
 
   console.info(`server running on ${await app.getUrl()}`);
 

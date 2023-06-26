@@ -156,6 +156,7 @@ module.exports = {
     "@typescript-eslint/prefer-function-type": "error",
     "@typescript-eslint/prefer-namespace-keyword": "error",
     "@typescript-eslint/no-unnecessary-condition": "off",
+    "@typescript-eslint/no-misused-promises": "off",
     "@typescript-eslint/quotes": [
       "error",
       "single",

@@ -10,9 +10,9 @@ import {
   MongooseHealthIndicator,
   TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
-import { ApiConfigService } from 'shared/services/api-config.service';
-import { LoggerService } from 'shared/services/logger.service';
 
+import { ApiConfigService } from '@/shared/services/api-config.service';
+import { LoggerService } from '@/shared/services/logger.service';
 @Controller('health')
 export class HealthCheckerController {
   constructor(

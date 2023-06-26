@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "rootDir": "src",
     "module": "commonjs",
     "declaration": true,
     "noImplicitAny": false,
@@ -21,9 +20,9 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": false,
     "moduleResolution": "node",
-    "baseUrl": "src",
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src/**/*"],

@@ -1,30 +1,67 @@
-FROM node:16.20.0-alpine AS build
-COPY package.json yarn.lock ./
+# Building layer
+FROM node:16.20.0-alpine as development
 
-RUN yarn install
+ARG SERVICES_NAME
+ARG PORT
 
-COPY . ./
+ENV PORT $PORT
+ENV SERVICES_NAME=$SERVICES_NAME
 
-RUN yarn build:prod
+# Create app directory
+RUN mkdir -p /srv/$SERVICES_NAME
+WORKDIR /srv/$SERVICES_NAME
 
-FROM node:16.20.0-alpine AS node_modules
-COPY package.json yarn.lock ./
+RUN echo /srv/$SERVICES_NAME
 
-RUN yarn install --prod
+ENV TZ=Asia/Bangkok
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-FROM node:16.20.0-alpine
 
-ARG PORT=3000
+# Optional NPM automation (auth) token build argument
+# ARG NPM_TOKEN
 
-RUN mkdir -p /usr/src/app
+# Optionally authenticate NPM registry
+# RUN npm set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
 
-WORKDIR /usr/src/app
 
-COPY --from=build build /usr/src/app/build
-COPY --from=node_modules node_modules /usr/src/app/node_modules
+# Copy configuration files
+COPY tsconfig*.json ./
+COPY package*.json ./
+# COPY .env ./
 
-COPY . /usr/src/app
+# Install dependencies from package-lock.json, see https://docs.npmjs.com/cli/v7/commands/npm-ci
+RUN npm ci
 
-EXPOSE $PORT
+# Copy application sources (.ts, .tsx, js)
+COPY src/ src/
 
-CMD [ "node", "build/main.js" ]
+# Build application (produces dist/ folder)
+RUN npm run build:prod
+
+# Runtime (production) layer
+# FROM node:16.20.0 as production
+FROM development AS production
+
+
+# Optional NPM automation (auth) token build argument
+# ARG NPM_TOKEN
+
+# Optionally authenticate NPM registry
+# RUN npm set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+
+WORKDIR /srv/$SERVICES_NAME
+
+# Copy dependencies files
+COPY package*.json ./
+
+# Install runtime dependecies (without dev/test dependecies)
+RUN npm ci --omit=dev
+
+# Copy production build
+COPY --from=development /srv/$SERVICES_NAME/build/ ./build/
+
+# Expose application port
+EXPOSE ${PORT}
+
+# Start application
+CMD [ "npm","run","start:prod" ]
