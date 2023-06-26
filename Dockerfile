@@ -2,9 +2,9 @@
 FROM node:16.20.0-alpine as development
 
 ARG SERVICES_NAME
-ARG PORT
+# ARG PORT
 
-ENV PORT $PORT
+# ENV PORT
 ENV SERVICES_NAME=$SERVICES_NAME
 
 # Create app directory
@@ -61,7 +61,7 @@ RUN npm ci --omit=dev
 COPY --from=development /srv/$SERVICES_NAME/build/ ./build/
 
 # Expose application port
-EXPOSE ${PORT}
+# EXPOSE PORT
 
 # Start application
 CMD [ "npm","run","start:prod" ]
